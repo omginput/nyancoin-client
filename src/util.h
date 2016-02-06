@@ -8,6 +8,8 @@
 
 #include "uint256.h"
 
+#include <pthread.h>
+
 #ifndef WIN32
 #include <sys/types.h>
 #include <sys/time.h>
@@ -551,7 +553,9 @@ public:
 
 // Note: It turns out we might have been able to use boost::thread
 // by using TerminateThread(boost::thread.native_handle(), 0);
-#ifdef WIN32
+
+#if FALSE
+//#ifdef WIN32
 typedef HANDLE pthread_t;
 
 inline pthread_t CreateThread(void(*pfn)(void*), void* parg, bool fWantHandle=false)
@@ -600,27 +604,29 @@ inline pthread_t CreateThread(void(*pfn)(void*), void* parg, bool fWantHandle=fa
     return hthread;
 }
 
-#define THREAD_PRIORITY_LOWEST          PRIO_MAX
+/*#define THREAD_PRIORITY_LOWEST          20
 #define THREAD_PRIORITY_BELOW_NORMAL    2
 #define THREAD_PRIORITY_NORMAL          0
-#define THREAD_PRIORITY_ABOVE_NORMAL    0
-
+#define THREAD_PRIORITY_ABOVE_NORMAL    -2
+*/
 inline void SetThreadPriority(int nPriority)
 {
-    // It's unclear if it's even possible to change thread priorities on Linux,
-    // but we really and truly need it for the generation threads.
+#ifdef WIN32
+    SetThreadPriority(GetCurrentThread(), nPriority);
+#else // WIN32
 #ifdef PRIO_THREAD
     setpriority(PRIO_THREAD, 0, nPriority);
-#else
+#else // PRIO_THREAD
     setpriority(PRIO_PROCESS, 0, nPriority);
-#endif
+#endif // PRIO_THREAD
+#endif // WIN32
 }
 
 inline void ExitThread(size_t nExitCode)
 {
     pthread_exit((void*)nExitCode);
 }
-#endif
+#endif // if FALSE else
 
 void RenameThread(const char* name);
 
