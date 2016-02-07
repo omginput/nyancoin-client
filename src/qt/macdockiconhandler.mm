@@ -1,8 +1,10 @@
 
 #include "macdockiconhandler.h"
 
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QWidget>
+#include <QImageWriter>
+#include <QMenu>
+#include <QBuffer>
+#include <QWidget>
 
 extern void qt_mac_set_dock_menu(QMenu*);
 
@@ -73,11 +75,20 @@ void MacDockIconHandler::setIcon(const QIcon &icon)
     if (icon.isNull())
         image = [[NSImage imageNamed:@"NSApplicationIcon"] retain];
     else {
+        // generate NSImage from QIcon and use this as dock icon.
         QSize size = icon.actualSize(QSize(128, 128));
         QPixmap pixmap = icon.pixmap(size);
-        CGImageRef cgImage = pixmap.toMacCGImageRef();
-        image = [[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize];
-        CFRelease(cgImage);
+
+        // Write image into a R/W buffer from raw pixmap, then save the image.
+        QBuffer notificationBuffer;
+        if (!pixmap.isNull() && notificationBuffer.open(QIODevice::ReadWrite)) {
+            QImageWriter writer(&notificationBuffer, "PNG");
+            if (writer.write(pixmap.toImage())) {
+                NSData* macImgData = [NSData dataWithBytes:notificationBuffer.buffer().data()
+                                             length:notificationBuffer.buffer().size()];
+                image =  [[NSImage alloc] initWithData:macImgData];
+            }
+        }
     }
 
     [NSApp setApplicationIconImage:image];
