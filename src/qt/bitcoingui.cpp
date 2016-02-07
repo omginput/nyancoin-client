@@ -55,7 +55,10 @@
 #include <QTimer>
 #include <QDragEnterEvent>
 #include <QUrl>
+#if QT_VERSION < 0x050000
+#else
 #include <QMimeData>
+#endif
 
 #include <iostream>
 

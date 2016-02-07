@@ -19,7 +19,10 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QThread>
+#if QT_VERSION < 0x050000
+#else
 #include <QUrlQuery>
+#endif
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -148,7 +151,12 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 
 QString HtmlEscape(const QString& str, bool fMultiLine)
 {
+#if QT_VERSION < 0x050000
+    QString escaped = Qt::escape(str);
+#else
     QString escaped = QString(str).toHtmlEscaped();
+#endif
+
     if(fMultiLine)
     {
         escaped = escaped.replace("\n", "<br>\n");
