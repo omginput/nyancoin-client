@@ -622,7 +622,7 @@ inline void SetThreadPriority(int nPriority)
 #endif // WIN32
 }
 
-inline void ExitThread(size_t nExitCode)
+inline void __ExitThread(size_t nExitCode)
 {
     pthread_exit((void*)nExitCode);
 }

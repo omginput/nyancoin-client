@@ -92,7 +92,7 @@ void Shutdown(void* parg)
         while (!fExit)
             Sleep(500);
         Sleep(100);
-        ExitThread(0);
+        __ExitThread(0);
     }
 }
 
