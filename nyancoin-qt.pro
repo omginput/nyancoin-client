@@ -6,11 +6,12 @@ DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_THREAD_PROV
 CONFIG += no_include_pwd
 
 QT += widgets
+#CONFIG += c++11
 
 macx:BDB_LIB_PATH = /usr/local/opt/berkeley-db4/lib
 macx:BDB_INCLUDE_PATH = /usr/local/opt/berkeley-db4/include
 macx:BOOST_INCLUDE_PATH=/Users/jamescoxon/Development/boost_1_60_0
-macx:BOOST_LIB_PATH=/Users/jamescoxon/Development/boost_1_60_0/stage/lib
+macx:BOOST_LIB_PATH=/usr/local/lib
 
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
