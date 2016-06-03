@@ -6,12 +6,15 @@ DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_THREAD_PROV
 CONFIG += no_include_pwd
 
 QT += widgets
-#CONFIG += c++11
 
 macx:BDB_LIB_PATH = /usr/local/opt/berkeley-db4/lib
 macx:BDB_INCLUDE_PATH = /usr/local/opt/berkeley-db4/include
-macx:BOOST_INCLUDE_PATH=/Users/jamescoxon/Development/boost_1_60_0
+macx:BOOST_INCLUDE_PATH=/usr/local/include/boost.
 macx:BOOST_LIB_PATH=/usr/local/lib
+macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+macx:QMAKE_MAC_SDK = macosx10.11
+macx:OPENSSL_LIB_PATH += /usr/local/opt/openssl/lib
+macx:OPENSSL_INCLUDE_PATH += /usr/local/opt/openssl/include
 
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
@@ -40,7 +43,7 @@ UI_DIR = build
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     # Mac: compile for maximum compatibility (10.5, 32-bit)
-    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk
+    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -arch i386 -isysroot /Developer/SDKs/MacOSX10.7.sdk -Wno-deprecated-declarations
 
     !windows:!macx {
         # Linux: static link
