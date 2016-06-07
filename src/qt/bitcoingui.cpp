@@ -74,7 +74,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     rpcConsole(0)
 {
     resize(850, 550);
-    setWindowTitle(tr("NyanCoin") + " - " + tr("Wallet"));
+    setWindowTitle(tr("NyanCoin") + " - " + tr("Wallet") + " [Hodler Edition]");
 #ifndef Q_WS_MAC
     qApp->setWindowIcon(QIcon(":icons/bitcoin"));
     setWindowIcon(QIcon(":icons/bitcoin"));
@@ -133,6 +133,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     // Status bar notification icons
     QFrame *frameBlocks = new QFrame();
+    frameBlocks->setFrameShape(QFrame::NoFrame);
     frameBlocks->setContentsMargins(0,0,0,0);
     frameBlocks->setMinimumWidth(73);
     frameBlocks->setMaximumWidth(73);
