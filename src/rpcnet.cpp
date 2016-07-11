@@ -6,9 +6,12 @@
 #include "net.h"
 #include "bitcoinrpc.h"
 
+#include <QEventLoop>
 #include <QString>
 #include <QByteArray>
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -75,38 +78,53 @@ Value getpeerinfo(const Array& params, bool fHelp)
     return ret;
 }
 
-const char* NYAN_SPACE_SEEDS = "https://nyan.space/peers.php?json";
+const static QString NYAN_SPACE_SEEDS("http://nyan.space/peers.php?json");
+extern void AddOneShot(string strDest);
 
 // vmp32k - experimental seeding method
 Value connectnyandotspacepeers(const Array& params, bool fHelp)
 {
+	if (fHelp) {
+		throw runtime_error(
+			"connectnyandotspacepeers\n"
+			"Fetch and connect to peers via the nyan.space peer list."
+		);
+	}
+	
     QNetworkAccessManager networkManager;
+	networkManager.setNetworkAccessible(QNetworkAccessManager::Accessible);
     QNetworkRequest req;
     req.setUrl(NYAN_SPACE_SEEDS);
 
     QNetworkReply *reply = networkManager.get(req);
-    QString responseBody = QString(reply->readall());
+	
+	// Need to connect signal somehow and wait for positive response before going on. >.<
+
+    QString responseBody = QString(reply->readAll());
 	delete reply;
 	
 	if (responseBody.length() <= 1) {
-		throw runtime_error("Unable to fetch peers from " NYAN_SPACE_SEEDS);
+		QString msg = QString("Unable to fetch peers from %1: %2").arg(NYAN_SPACE_SEEDS).arg(reply->errorString());
+		throw runtime_error(msg.toStdString().c_str());
 	}
 	
 	QJsonDocument doc = QJsonDocument::fromJson(responseBody.toUtf8());
 	
 	QJsonObject jsonObject = doc.object();
-	QJsonArray peers = jsonObject['results'].toArray();
+	QJsonArray peers = jsonObject["results"].toArray();
 	
 	Array ret;
 	
-	BOOST_FOREACH (const QJsonValue &value, jsonArray)
+	BOOST_FOREACH (const QJsonValue &value, peers)
 	{
-		QJsonObject obj = value.toObject();
-		QString addr = value['addr'].toString()
+		QJsonObject jsonobj = value.toObject();
+		QString addr = jsonobj["addr"].toString();
 		
 		Object obj;
-        obj.push_back(Pair("addr", addr);
+        obj.push_back(Pair("addr", addr.toStdString().c_str()));
         ret.push_back(obj);
+		
+		AddOneShot(addr.toStdString().c_str());
 	}
 
     return ret;
