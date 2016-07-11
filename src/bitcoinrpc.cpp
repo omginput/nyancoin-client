@@ -54,6 +54,7 @@ extern Value createrawtransaction(const Array& params, bool fHelp);
 extern Value decoderawtransaction(const Array& params, bool fHelp);
 extern Value signrawtransaction(const Array& params, bool fHelp);
 extern Value sendrawtransaction(const Array& params, bool fHelp);
+extern Value connectnyandotspacepeers(const Array& params, bool fHelp); // in rpcnet.cpp
 
 const Object emptyobj;
 
@@ -2377,6 +2378,9 @@ static const CRPCCommand vRPCCommands[] =
     { "decoderawtransaction",   &decoderawtransaction,   false },
     { "signrawtransaction",     &signrawtransaction,     false },
     { "sendrawtransaction",     &sendrawtransaction,     false },
+	
+	// vmp32k - experimental seeding method
+	{ "connectnyandotspacepeers", &connectnyandotspacepeers, false },
 };
 
 CRPCTable::CRPCTable()

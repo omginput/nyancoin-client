@@ -6,6 +6,15 @@
 #include "net.h"
 #include "bitcoinrpc.h"
 
+#include <QString>
+#include <QByteArray>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
+
+
 using namespace json_spirit;
 using namespace std;
 
@@ -65,4 +74,42 @@ Value getpeerinfo(const Array& params, bool fHelp)
     
     return ret;
 }
+
+const char* NYAN_SPACE_SEEDS = "https://nyan.space/peers.php?json";
+
+// vmp32k - experimental seeding method
+Value connectnyandotspacepeers(const Array& params, bool fHelp)
+{
+    QNetworkAccessManager networkManager;
+    QNetworkRequest req;
+    req.setUrl(NYAN_SPACE_SEEDS);
+
+    QNetworkReply *reply = networkManager.get(req);
+    QString responseBody = QString(reply->readall());
+	delete reply;
+	
+	if (responseBody.length() <= 1) {
+		throw runtime_error("Unable to fetch peers from " NYAN_SPACE_SEEDS);
+	}
+	
+	QJsonDocument doc = QJsonDocument::fromJson(responseBody.toUtf8());
+	
+	QJsonObject jsonObject = doc.object();
+	QJsonArray peers = jsonObject['results'].toArray();
+	
+	Array ret;
+	
+	BOOST_FOREACH (const QJsonValue &value, jsonArray)
+	{
+		QJsonObject obj = value.toObject();
+		QString addr = value['addr'].toString()
+		
+		Object obj;
+        obj.push_back(Pair("addr", addr);
+        ret.push_back(obj);
+	}
+
+    return ret;
+}
+
 
