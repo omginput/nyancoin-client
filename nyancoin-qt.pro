@@ -7,6 +7,8 @@ CONFIG += no_include_pwd
 
 QT += widgets
 
+BDB_LIB_SUFFIX = "-4.8"
+
 macx:BDB_LIB_PATH = /opt/local/lib/db48
 macx:BDB_INCLUDE_PATH = /opt/local/include/db48
 macx:BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.61.0_1/include
