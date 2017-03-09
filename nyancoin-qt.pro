@@ -7,14 +7,16 @@ CONFIG += no_include_pwd
 
 QT += widgets
 
-macx:BDB_LIB_PATH = /usr/local/opt/berkeley-db4/lib
-macx:BDB_INCLUDE_PATH = /usr/local/opt/berkeley-db4/include
-macx:BOOST_INCLUDE_PATH=/usr/local/include/boost.
+BDB_LIB_SUFFIX = "-4.8"
+
+macx:BDB_LIB_PATH = /opt/local/lib/db48
+macx:BDB_INCLUDE_PATH = /opt/local/include/db48
+macx:BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.61.0_1/include
 macx:BOOST_LIB_PATH=/usr/local/lib
 macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
-macx:QMAKE_MAC_SDK = macosx10.11
-macx:OPENSSL_LIB_PATH += /usr/local/opt/openssl/lib
-macx:OPENSSL_INCLUDE_PATH += /usr/local/opt/openssl/include
+#macx:QMAKE_MAC_SDK = macosx10.10
+macx:OPENSSL_LIB_PATH += /opt/local/lib
+macx:OPENSSL_INCLUDE_PATH += /opt/local/include
 
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
@@ -43,7 +45,7 @@ UI_DIR = build
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     # Mac: compile for maximum compatibility (10.5, 32-bit)
-    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -arch i386 -isysroot /Developer/SDKs/MacOSX10.7.sdk -Wno-deprecated-declarations
+    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.7.sdk -Wno-deprecated-declarations
 
     !windows:!macx {
         # Linux: static link
@@ -366,7 +368,7 @@ macx:OBJECTIVE_SOURCES += src/qt/macdockiconhandler.mm
 macx:LIBS += -framework Foundation -framework ApplicationServices -framework AppKit
 macx:DEFINES += MAC_OSX MSG_NOSIGNAL=0
 macx:ICON = src/qt/res/icons/bitcoin.icns
-macx:TARGET = "Decayscript-Qt"
+macx:TARGET = "Nyancoin-Qt"
 
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
 INCLUDEPATH += $$BOOST_INCLUDE_PATH $$BDB_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH
@@ -384,5 +386,3 @@ contains(RELEASE, 1) {
 }
 
 system($$QMAKE_LRELEASE -silent $$_PRO_FILE_)
-
-
