@@ -30,6 +30,7 @@ public:
         DisplayAddresses,  // bool
         DetachDatabases,   // bool
         Language,          // QString
+        HodlerLabel,       // bool
         OptionIDRowCount,
     };
 
@@ -49,6 +50,7 @@ public:
     int getDisplayUnit();
     bool getDisplayAddresses();
     QString getLanguage() { return language; }
+    bool getHodlerLabel();
 
 private:
     int nDisplayUnit;
@@ -56,6 +58,7 @@ private:
     bool fMinimizeToTray;
     bool fMinimizeOnClose;
     QString language;
+    bool bHodlerLabel;
 
 signals:
     void displayUnitChanged(int unit);
