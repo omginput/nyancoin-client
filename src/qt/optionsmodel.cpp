@@ -47,6 +47,7 @@ void OptionsModel::Init()
     fMinimizeOnClose = settings.value("fMinimizeOnClose", false).toBool();
     nTransactionFee = settings.value("nTransactionFee").toLongLong();
     language = settings.value("language", "").toString();
+    bHodlerLabel = settings.value("hodler", false).toBool();
 
     // These are shared with core Bitcoin; we want
     // command-line options to override the GUI settings:
@@ -84,7 +85,7 @@ bool OptionsModel::Upgrade()
         }
     }
     QList<QString> boolOptions;
-    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" ;
+    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "hodler" ;
     foreach(QString key, boolOptions)
     {
         bool value = false;
@@ -166,6 +167,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return QVariant(bitdb.GetDetach());
         case Language:
             return settings.value("language", "");
+        case HodlerLabel:
+            return QVariant(bHodlerLabel);
         default:
             return QVariant();
         }
@@ -240,6 +243,9 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case Language:
             settings.setValue("language", value);
             break;
+        case HodlerLabel:
+            bHodlerLabel = value.toBool();
+            settings.setValue("hodler", bHodlerLabel);
         default:
             break;
         }
@@ -272,4 +278,9 @@ int OptionsModel::getDisplayUnit()
 bool OptionsModel::getDisplayAddresses()
 {
     return bDisplayAddresses;
+}
+
+bool OptionsModel::getHodlerLabel()
+{
+    return bHodlerLabel;
 }

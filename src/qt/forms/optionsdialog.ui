@@ -23,7 +23,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabMain">
       <attribute name="title">
@@ -340,6 +340,13 @@
          </property>
          <property name="text">
           <string>&amp;Display addresses in transaction list</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="hodlerEdition">
+         <property name="text">
+          <string>Hodler Edition</string>
          </property>
         </widget>
        </item>
