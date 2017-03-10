@@ -2378,9 +2378,9 @@ static const CRPCCommand vRPCCommands[] =
     { "decoderawtransaction",   &decoderawtransaction,   false },
     { "signrawtransaction",     &signrawtransaction,     false },
     { "sendrawtransaction",     &sendrawtransaction,     false },
-	
-	// vmp32k - experimental seeding method
-	{ "connectnyandotspacepeers", &connectnyandotspacepeers, false },
+
+    // vmp32k - experimental seeding method
+    { "connectnyanspacepeers", &connectnyandotspacepeers, false },
 };
 
 CRPCTable::CRPCTable()
