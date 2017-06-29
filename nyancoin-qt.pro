@@ -21,8 +21,8 @@ macx:OPENSSL_INCLUDE_PATH += /opt/local/include
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
 win32 {
-BOOST_THREAD_LIB_SUFFIX = _win32-mt
-LIBS += -lpthread
+    BOOST_THREAD_LIB_SUFFIX = _win32-mt
+    LIBS += -lpthread
 }
 
 #windows:LIBS += -lshlwapi
@@ -193,7 +193,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/scrypt.h \
     src/qt/miningpage.h \
     src/version.h \
-    src/qt/rpcconsole.h
+    src/qt/rpcconsole.h \
+    src/qt/nyanspaceapi.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -254,7 +255,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/rpcconsole.cpp \
     src/scrypt.c \
     src/qt/miningpage.cpp \
-    src/noui.cpp
+    src/noui.cpp \
+    src/qt/nyanspaceapi.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc

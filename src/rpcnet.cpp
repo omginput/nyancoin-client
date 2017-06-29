@@ -6,19 +6,6 @@
 #include "net.h"
 #include "bitcoinrpc.h"
 
-#include <QCoreApplication>
-#include <QEventLoop>
-#include <QString>
-#include <QByteArray>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonValue>
-
-
 using namespace json_spirit;
 using namespace std;
 
@@ -78,52 +65,3 @@ Value getpeerinfo(const Array& params, bool fHelp)
     
     return ret;
 }
-
-const static QString NYAN_SPACE_SEEDS("https://nyan.space/peers.php?json");
-extern void AddOneShot(string strDest);
-
-// vmp32k - experimental seeding method
-Value connectnyandotspacepeers(const Array& params, bool fHelp)
-{
-    if (fHelp) {
-        throw runtime_error(
-            "connectnyandotspacepeers\n"
-            "Fetch and connect to peers via the nyan.space peer list."
-        );
-    }
-
-    QNetworkAccessManager networkManager;
-    networkManager.setNetworkAccessible(QNetworkAccessManager::Accessible);
-    QNetworkRequest req;
-    req.setUrl(NYAN_SPACE_SEEDS);
-    QNetworkReply *reply = networkManager.get(req);
-
-    while(!reply->isFinished()) {
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    }
-
-    QString responseBody = QString(reply->readAll());
-    delete reply;
-
-    if (responseBody.length() <= 1) {
-        QString msg = QString("Unable to fetch peers from %1: %2").arg(NYAN_SPACE_SEEDS).arg(reply->errorString());
-        throw runtime_error(msg.toStdString().c_str());
-    }
-
-    QJsonDocument doc = QJsonDocument::fromJson(responseBody.toUtf8());
-    QJsonObject jsonObject = doc.object();
-    QJsonArray peers = jsonObject["result"].toArray();
-
-    //Array ret;
-
-    BOOST_FOREACH (const QJsonValue &value, peers)
-    {
-        QJsonObject jsonobj = value.toObject();
-        QString addr = jsonobj["addr"].toString();
-        AddOneShot(addr.toStdString().c_str());
-    }
-
-    return (QString("%1 peers added from nyan.space.").arg(peers.count())).toStdString().c_str();
-}
-
-

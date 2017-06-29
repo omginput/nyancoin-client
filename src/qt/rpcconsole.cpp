@@ -123,6 +123,9 @@ RPCConsole::RPCConsole(QWidget *parent) :
     // set OpenSSL version label
     ui->openSSLVersion->setText(SSLeay_version(SSLEAY_VERSION));
 
+    this->nyanapi = new NyanSpaceAPI(this);
+    connect(nyanapi, SIGNAL(getmorepeers_finished(int)), this, SLOT(getmorepeers_finished(int)));
+
     startExecutor();
 
     clear();
@@ -132,6 +135,11 @@ RPCConsole::~RPCConsole()
 {
     emit stopExecutor();
     delete ui;
+}
+
+void RPCConsole::getmorepeers_finished(int numPeers)
+{
+    this->message(RPCConsole::CMD_REPLY, QString("%1 peers added from nyan.space.").arg(numPeers));
 }
 
 bool RPCConsole::eventFilter(QObject* obj, QEvent *event)
@@ -256,7 +264,14 @@ void RPCConsole::on_lineEdit_returnPressed()
     if(!cmd.isEmpty())
     {
         message(CMD_REQUEST, cmd);
-        emit cmdRequest(cmd);
+
+        // getmorepeers
+        if(cmd.compare("getmorepeers", Qt::CaseInsensitive) == 0) {
+            message(RPCConsole::CMD_REPLY, QString::fromStdString("Trying to connect to more peers ..."));
+            nyanapi->getmorepeers();
+        } else {
+            emit cmdRequest(cmd);
+        }
         // Truncate history from current position
         history.erase(history.begin() + historyPtr, history.end());
         // Append command to history
