@@ -21,7 +21,7 @@ macx:OPENSSL_INCLUDE_PATH += /opt/local/include
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
 win32 {
-    BOOST_THREAD_LIB_SUFFIX = _win32-mt
+    #BOOST_THREAD_LIB_SUFFIX = _win32-mt
     LIBS += -lpthread
 }
 

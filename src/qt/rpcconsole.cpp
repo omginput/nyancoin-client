@@ -348,3 +348,15 @@ void RPCConsole::on_showCLOptionsButton_clicked()
     GUIUtil::HelpMessageBox help;
     help.exec();
 }
+
+
+extern bool global_fsync_toggle;
+void RPCConsole::on_toggleFsyncButton_clicked()
+{
+    global_fsync_toggle = !global_fsync_toggle;
+    if(global_fsync_toggle) {
+        this->ui->toggleFsyncButton->setText("Disable fsync()");
+    } else {
+        this->ui->toggleFsyncButton->setText("Enable fsync()");
+    }
+}
