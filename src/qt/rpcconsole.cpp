@@ -4,6 +4,7 @@
 #include "clientmodel.h"
 #include "bitcoinrpc.h"
 #include "guiutil.h"
+#include "miningpage.h"
 
 #include <QTime>
 #include <QTimer>
@@ -115,6 +116,8 @@ RPCConsole::RPCConsole(QWidget *parent) :
     ui->showCLOptionsButton->setIcon(QIcon(":/icons/options"));
 #endif
 
+    miningPage = new MiningPage(ui->tab_mining);
+
     // Install event filter for up and down arrow
     ui->lineEdit->installEventFilter(this);
 
@@ -178,6 +181,8 @@ void RPCConsole::setClientModel(ClientModel *model)
         ui->isTestNet->setChecked(model->isTestNet());
 
         setNumBlocks(model->getNumBlocks(), model->getNumBlocksOfPeers());
+
+        miningPage->setModel(model);
     }
 }
 

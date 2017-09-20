@@ -9,6 +9,7 @@ namespace Ui {
     class RPCConsole;
 }
 class ClientModel;
+class MiningPage;
 
 /** Local Bitcoin RPC console. */
 class RPCConsole: public QDialog
@@ -66,6 +67,7 @@ private:
     QStringList history;
     int historyPtr;
     NyanSpaceAPI *nyanapi;
+    MiningPage *miningPage;
 
     void startExecutor();
 };

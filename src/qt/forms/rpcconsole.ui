@@ -465,6 +465,12 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_mining">
+      <attribute name="title">
+       <string>Mining</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4"/>
+     </widget>
     </widget>
    </item>
   </layout>
