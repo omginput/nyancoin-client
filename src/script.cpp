@@ -791,17 +791,17 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, co
                         break;
 
                     case OP_MUL:
-                        if (!BN_mul(&bn, &bn1, &bn2, pctx))
+                        if (!BN_mul(bn.m_bn, bn1.m_bn, bn2.m_bn, pctx))
                             return false;
                         break;
 
                     case OP_DIV:
-                        if (!BN_div(&bn, NULL, &bn1, &bn2, pctx))
+                        if (!BN_div(bn.m_bn, NULL, bn1.m_bn, bn2.m_bn, pctx))
                             return false;
                         break;
 
                     case OP_MOD:
-                        if (!BN_mod(&bn, &bn1, &bn2, pctx))
+                        if (!BN_mod(bn.m_bn, bn1.m_bn, bn2.m_bn, pctx))
                             return false;
                         break;
 
