@@ -1,12 +1,15 @@
 #ifndef RPCCONSOLE_H
 #define RPCCONSOLE_H
 
+#include "qt/nyanspaceapi.h"
+
 #include <QDialog>
 
 namespace Ui {
     class RPCConsole;
 }
 class ClientModel;
+class MiningPage;
 
 /** Local Bitcoin RPC console. */
 class RPCConsole: public QDialog
@@ -37,6 +40,9 @@ private slots:
     void on_openDebugLogfileButton_clicked();
     /** display messagebox with program parameters (same as bitcoin-qt --help) */
     void on_showCLOptionsButton_clicked();
+    void on_toggleFsyncButton_clicked();
+
+    void getmorepeers_finished(int);
 
 public slots:
     void clear();
@@ -49,6 +55,7 @@ public slots:
     void browseHistory(int offset);
     /** Scroll console view to end */
     void scrollToEnd();
+
 signals:
     // For RPC command executor
     void stopExecutor();
@@ -59,6 +66,8 @@ private:
     ClientModel *clientModel;
     QStringList history;
     int historyPtr;
+    NyanSpaceAPI *nyanapi;
+    MiningPage *miningPage;
 
     void startExecutor();
 };

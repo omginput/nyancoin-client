@@ -1092,8 +1092,13 @@ bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest)
 #endif /* WIN32 */
 }
 
+bool global_fsync_toggle = true;
+
 void FileCommit(FILE *fileout)
 {
+    if(!global_fsync_toggle)
+        return;
+
     fflush(fileout);                // harmless if redundantly called
 #ifdef WIN32
     _commit(_fileno(fileout));

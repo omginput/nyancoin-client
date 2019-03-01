@@ -65,4 +65,3 @@ Value getpeerinfo(const Array& params, bool fHelp)
     
     return ret;
 }
-

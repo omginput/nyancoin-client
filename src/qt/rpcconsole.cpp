@@ -4,6 +4,7 @@
 #include "clientmodel.h"
 #include "bitcoinrpc.h"
 #include "guiutil.h"
+#include "miningpage.h"
 
 #include <QTime>
 #include <QTimer>
@@ -115,6 +116,8 @@ RPCConsole::RPCConsole(QWidget *parent) :
     ui->showCLOptionsButton->setIcon(QIcon(":/icons/options"));
 #endif
 
+    miningPage = new MiningPage(ui->tab_mining);
+
     // Install event filter for up and down arrow
     ui->lineEdit->installEventFilter(this);
 
@@ -122,6 +125,9 @@ RPCConsole::RPCConsole(QWidget *parent) :
 
     // set OpenSSL version label
     ui->openSSLVersion->setText(SSLeay_version(SSLEAY_VERSION));
+
+    this->nyanapi = new NyanSpaceAPI(this);
+    connect(nyanapi, SIGNAL(getmorepeers_finished(int)), this, SLOT(getmorepeers_finished(int)));
 
     startExecutor();
 
@@ -132,6 +138,11 @@ RPCConsole::~RPCConsole()
 {
     emit stopExecutor();
     delete ui;
+}
+
+void RPCConsole::getmorepeers_finished(int numPeers)
+{
+    this->message(RPCConsole::CMD_REPLY, QString("%1 peers added from nyan.space.").arg(numPeers));
 }
 
 bool RPCConsole::eventFilter(QObject* obj, QEvent *event)
@@ -170,6 +181,8 @@ void RPCConsole::setClientModel(ClientModel *model)
         ui->isTestNet->setChecked(model->isTestNet());
 
         setNumBlocks(model->getNumBlocks(), model->getNumBlocksOfPeers());
+
+        miningPage->setModel(model);
     }
 }
 
@@ -256,7 +269,14 @@ void RPCConsole::on_lineEdit_returnPressed()
     if(!cmd.isEmpty())
     {
         message(CMD_REQUEST, cmd);
-        emit cmdRequest(cmd);
+
+        // getmorepeers
+        if(cmd.compare("getmorepeers", Qt::CaseInsensitive) == 0) {
+            message(RPCConsole::CMD_REPLY, QString::fromStdString("Trying to connect to more peers ..."));
+            nyanapi->getmorepeers();
+        } else {
+            emit cmdRequest(cmd);
+        }
         // Truncate history from current position
         history.erase(history.begin() + historyPtr, history.end());
         // Append command to history
@@ -332,4 +352,16 @@ void RPCConsole::on_showCLOptionsButton_clicked()
 {
     GUIUtil::HelpMessageBox help;
     help.exec();
+}
+
+
+extern bool global_fsync_toggle;
+void RPCConsole::on_toggleFsyncButton_clicked()
+{
+    global_fsync_toggle = !global_fsync_toggle;
+    if(global_fsync_toggle) {
+        this->ui->toggleFsyncButton->setText("Disable fsync()");
+    } else {
+        this->ui->toggleFsyncButton->setText("Enable fsync()");
+    }
 }

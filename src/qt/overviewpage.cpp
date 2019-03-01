@@ -140,7 +140,18 @@ void OverviewPage::setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 
     currentBalance = balance;
     currentUnconfirmedBalance = unconfirmedBalance;
     currentImmatureBalance = immatureBalance;
-    ui->labelBalance->setText(BitcoinUnits::formatWithUnit(unit, balance));
+
+    // Hodling edition
+    QString balanceFmt = BitcoinUnits::formatWithUnit(unit, balance);
+
+
+    bool showHodler = model->getOptionsModel()->getHodlerLabel();
+    if(showHodler && balance > 0) {
+        qint64 MAX_MONEY = (qint64)337000000 * (qint64)100000000;
+        balanceFmt = QString("%1 (%2 %)").arg(balanceFmt, QString::number(((double)balance / (double)MAX_MONEY) * 100.0f, 'f', 3));
+    }
+    ui->labelBalance->setText(balanceFmt);
+
     ui->labelUnconfirmed->setText(BitcoinUnits::formatWithUnit(unit, unconfirmedBalance));
     ui->labelImmature->setText(BitcoinUnits::formatWithUnit(unit, immatureBalance));
 
