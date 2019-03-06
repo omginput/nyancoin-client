@@ -4,10 +4,13 @@ VERSION = 0.7.2
 INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN __NO_SYSTEM_INCLUDES
 CONFIG += no_include_pwd
+CONFIG += debug_and_release
 
 QT += widgets network
 
-BDB_LIB_SUFFIX = "-4.8"
+#BDB_LIB_SUFFIX = "-4.8"
+BDB_LIB_PATH=/opt/BerkeleyDB-4.8/lib
+BDB_INCLUDE_PATH=/opt/BerkeleyDB-4.8/include
 
 macx:BDB_LIB_PATH = /opt/local/lib/db48
 macx:BDB_INCLUDE_PATH = /opt/local/include/db48
@@ -114,8 +117,13 @@ contains(BITCOIN_NEED_QT_PLUGINS, 1) {
     DEFINES += HAVE_BUILD_INFO
 }
 
-gcc:QMAKE_CFLAGS += -msse2 -Wa,-mbig-obj
-gcc:QMAKE_CXXFLAGS += -msse2 -Wa,-mbig-obj
+win32 {
+    gcc:QMAKE_CFLAGS += -Wa,-mbig-obj
+    gcc:QMAKE_CXXFLAGS += -Wa,-mbig-obj
+}
+
+gcc:QMAKE_CFLAGS += -msse2
+gcc:QMAKE_CXXFLAGS += -msse2
 gcc:QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wextra -Wformat -Wformat-security -Wno-unused-parameter  -Wstack-protector
 
 msvc:QMAKE_CFLAGS += /arch:SSE2
