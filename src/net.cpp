@@ -22,12 +22,12 @@ using namespace boost;
 
 static const int MAX_OUTBOUND_CONNECTIONS = 8;
 
-void ThreadMessageHandler2(void* parg);
-void ThreadSocketHandler2(void* parg);
-void ThreadOpenConnections2(void* parg);
-void ThreadOpenAddedConnections2(void* parg);
+void *ThreadMessageHandler2(void* parg);
+void *ThreadSocketHandler2(void* parg);
+void *ThreadOpenConnections2(void* parg);
+void *ThreadOpenAddedConnections2(void* parg);
 
-void ThreadDNSAddressSeed2(void* parg);
+void *ThreadDNSAddressSeed2(void* parg);
 bool OpenNetworkConnection(const CAddress& addrConnect, CSemaphoreGrant *grantOutbound = NULL, const char *strDest = NULL, bool fOneShot = false);
 
 
@@ -398,7 +398,7 @@ bool GetMyExternalIP(CNetAddr& ipRet)
     return false;
 }
 
-void ThreadGetMyExternalIP(void* parg)
+void *ThreadGetMyExternalIP(void* parg)
 {
     // Make this thread recognisable as the external IP detection thread
     RenameThread("bitcoin-ext-ip");
@@ -409,6 +409,7 @@ void ThreadGetMyExternalIP(void* parg)
         printf("GetMyExternalIP() returned %s\n", addrLocalHost.ToStringIP().c_str());
         AddLocal(addrLocalHost, LOCAL_HTTP);
     }
+    return NULL;
 }
 
 
@@ -629,7 +630,7 @@ void CNode::copyStats(CNodeStats &stats)
 
 
 
-void ThreadSocketHandler(void* parg)
+void *ThreadSocketHandler(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadSocketHandler(parg));
 
@@ -650,9 +651,10 @@ void ThreadSocketHandler(void* parg)
         throw; // support pthread_cancel()
     }
     printf("ThreadSocketHandler exited\n");
+    return NULL;
 }
 
-void ThreadSocketHandler2(void* parg)
+void *ThreadSocketHandler2(void* parg)
 {
     printf("ThreadSocketHandler started\n");
     list<CNode*> vNodesDisconnected;
@@ -770,7 +772,7 @@ void ThreadSocketHandler2(void* parg)
         int nSelect = select(hSocketMax + 1, &fdsetRecv, &fdsetSend, &fdsetError, &timeout);
         vnThreadsRunning[THREAD_SOCKETHANDLER]++;
         if (fShutdown)
-            return;
+            return NULL;
         if (nSelect == SOCKET_ERROR)
         {
             int nErr = WSAGetLastError();
@@ -857,7 +859,7 @@ void ThreadSocketHandler2(void* parg)
         BOOST_FOREACH(CNode* pnode, vNodesCopy)
         {
             if (fShutdown)
-                return;
+                return NULL;
 
             //
             // Receive
@@ -974,6 +976,7 @@ void ThreadSocketHandler2(void* parg)
 
         Sleep(10);
     }
+    return NULL;
 }
 
 
@@ -1000,7 +1003,7 @@ static const char *strDNSSeed[][2] = {
     {"nyanseed.com", "nyanseed.com"},
 };
 
-void ThreadDNSAddressSeed(void* parg)
+void *ThreadDNSAddressSeed(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadDNSAddressSeed(parg));
 
@@ -1021,9 +1024,10 @@ void ThreadDNSAddressSeed(void* parg)
         throw; // support pthread_cancel()
     }
     printf("ThreadDNSAddressSeed exited\n");
+    return NULL;
 }
 
-void ThreadDNSAddressSeed2(void* parg)
+void *ThreadDNSAddressSeed2(void* parg)
 {
     printf("ThreadDNSAddressSeed started\n");
     int found = 0;
@@ -1055,6 +1059,7 @@ void ThreadDNSAddressSeed2(void* parg)
     }
 
     printf("%d addresses found from DNS seeds\n", found);
+    return NULL;
 }
 
 
@@ -1097,7 +1102,7 @@ void ThreadDumpAddress2(void* parg)
     vnThreadsRunning[THREAD_DUMPADDRESS]--;
 }
 
-void ThreadDumpAddress(void* parg)
+void *ThreadDumpAddress(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadDumpAddress(parg));
 
@@ -1112,9 +1117,10 @@ void ThreadDumpAddress(void* parg)
         PrintException(&e, "ThreadDumpAddress()");
     }
     printf("ThreadDumpAddress exited\n");
+    return NULL;
 }
 
-void ThreadOpenConnections(void* parg)
+void *ThreadOpenConnections(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadOpenConnections(parg));
 
@@ -1135,6 +1141,7 @@ void ThreadOpenConnections(void* parg)
         PrintException(NULL, "ThreadOpenConnections()");
     }
     printf("ThreadOpenConnections exited\n");
+    return NULL;
 }
 
 void static ProcessOneShot()
@@ -1155,7 +1162,7 @@ void static ProcessOneShot()
     }
 }
 
-void ThreadOpenConnections2(void* parg)
+void *ThreadOpenConnections2(void* parg)
 {
     printf("ThreadOpenConnections started\n");
 
@@ -1173,7 +1180,7 @@ void ThreadOpenConnections2(void* parg)
                 {
                     Sleep(500);
                     if (fShutdown)
-                        return;
+                        return NULL;
                 }
             }
         }
@@ -1189,14 +1196,14 @@ void ThreadOpenConnections2(void* parg)
         Sleep(500);
         vnThreadsRunning[THREAD_OPENCONNECTIONS]++;
         if (fShutdown)
-            return;
+            return NULL;
 
 
         vnThreadsRunning[THREAD_OPENCONNECTIONS]--;
         CSemaphoreGrant grant(*semOutbound);
         vnThreadsRunning[THREAD_OPENCONNECTIONS]++;
         if (fShutdown)
-            return;
+            return NULL;
 
         // Add seed nodes if IRC isn't working
         if (addrman.size()==0 && (GetTime() - nStart > 60) && !fTestNet)
@@ -1271,7 +1278,7 @@ void ThreadOpenConnections2(void* parg)
     }
 }
 
-void ThreadOpenAddedConnections(void* parg)
+void *ThreadOpenAddedConnections(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadOpenAddedConnections(parg));
 
@@ -1292,14 +1299,16 @@ void ThreadOpenAddedConnections(void* parg)
         PrintException(NULL, "ThreadOpenAddedConnections()");
     }
     printf("ThreadOpenAddedConnections exited\n");
+
+    return NULL;
 }
 
-void ThreadOpenAddedConnections2(void* parg)
+void *ThreadOpenAddedConnections2(void* parg)
 {
     printf("ThreadOpenAddedConnections started\n");
 
     if (mapArgs.count("-addnode") == 0)
-        return;
+        return NULL;
 
     if (GetNameProxy()) {
         while(!fShutdown) {
@@ -1313,7 +1322,7 @@ void ThreadOpenAddedConnections2(void* parg)
             Sleep(120000); // Retry every 2 minutes
             vnThreadsRunning[THREAD_ADDEDCONNECTIONS]++;
         }
-        return;
+        return NULL;
     }
 
     vector<vector<CService> > vservAddressesToAdd(0);
@@ -1353,15 +1362,15 @@ void ThreadOpenAddedConnections2(void* parg)
             OpenNetworkConnection(CAddress(*(vserv.begin())), &grant);
             Sleep(500);
             if (fShutdown)
-                return;
+                return NULL;
         }
         if (fShutdown)
-            return;
+            return NULL;
         vnThreadsRunning[THREAD_ADDEDCONNECTIONS]--;
         Sleep(120000); // Retry every 2 minutes
         vnThreadsRunning[THREAD_ADDEDCONNECTIONS]++;
         if (fShutdown)
-            return;
+            return NULL;
     }
 }
 
@@ -1404,7 +1413,7 @@ bool OpenNetworkConnection(const CAddress& addrConnect, CSemaphoreGrant *grantOu
 
 
 
-void ThreadMessageHandler(void* parg)
+void *ThreadMessageHandler(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadMessageHandler(parg));
 
@@ -1425,9 +1434,10 @@ void ThreadMessageHandler(void* parg)
         PrintException(NULL, "ThreadMessageHandler()");
     }
     printf("ThreadMessageHandler exited\n");
+    return NULL;
 }
 
-void ThreadMessageHandler2(void* parg)
+void *ThreadMessageHandler2(void* parg)
 {
     printf("ThreadMessageHandler started\n");
     SetThreadPriority(THREAD_PRIORITY_BELOW_NORMAL);
@@ -1454,7 +1464,7 @@ void ThreadMessageHandler2(void* parg)
                     ProcessMessages(pnode);
             }
             if (fShutdown)
-                return;
+                return NULL;
 
             // Send messages
             {
@@ -1463,7 +1473,7 @@ void ThreadMessageHandler2(void* parg)
                     SendMessages(pnode, pnode == pnodeTrickle);
             }
             if (fShutdown)
-                return;
+                return NULL;
         }
 
         {
@@ -1481,8 +1491,9 @@ void ThreadMessageHandler2(void* parg)
             StartShutdown();
         vnThreadsRunning[THREAD_MESSAGEHANDLER]++;
         if (fShutdown)
-            return;
+            return NULL;
     }
+    return NULL;
 }
 
 
@@ -1655,7 +1666,7 @@ void static Discover()
     CreateThread(ThreadGetMyExternalIP, NULL);
 }
 
-void StartNode(void* parg)
+void *StartNode(void* parg)
 {
     // Make this thread recognisable as the startup thread
     RenameThread("bitcoin-start");
@@ -1708,6 +1719,7 @@ void StartNode(void* parg)
 
     // Generate coins in the background
     GenerateBitcoins(GetBoolArg("-gen", false), pwalletMain);
+    return NULL;
 }
 
 bool StopNode()

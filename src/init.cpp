@@ -31,12 +31,13 @@ CClientUIInterface uiInterface;
 // Shutdown
 //
 
-void ExitTimeout(void* parg)
+void *ExitTimeout(void* parg)
 {
 #ifdef WIN32
     Sleep(5000);
     ExitProcess(0);
 #endif
+    return NULL;
 }
 
 void StartShutdown()

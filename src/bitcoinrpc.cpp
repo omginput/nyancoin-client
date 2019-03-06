@@ -57,7 +57,7 @@ extern Value sendrawtransaction(const Array& params, bool fHelp);
 
 const Object emptyobj;
 
-void ThreadRPCServer3(void* parg);
+void *ThreadRPCServer3(void* parg);
 
 Object JSONRPCError(int code, const string& message)
 {
@@ -1615,15 +1615,16 @@ Value keypoolrefill(const Array& params, bool fHelp)
 }
 
 
-void ThreadTopUpKeyPool(void* parg)
+void *ThreadTopUpKeyPool(void* parg)
 {
     // Make this thread recognisable as the key-topping-up thread
     RenameThread("bitcoin-key-top");
 
     pwalletMain->TopUpKeyPool();
+    return NULL;
 }
 
-void ThreadCleanWalletPassphrase(void* parg)
+void *ThreadCleanWalletPassphrase(void* parg)
 {
     // Make this thread recognisable as the wallet relocking thread
     RenameThread("bitcoin-lock-wa");
@@ -1665,6 +1666,7 @@ void ThreadCleanWalletPassphrase(void* parg)
     LEAVE_CRITICAL_SECTION(cs_nWalletUnlockTime);
 
     delete (int64*)parg;
+    return NULL;
 }
 
 Value walletpassphrase(const Array& params, bool fHelp)
@@ -2736,7 +2738,7 @@ private:
     iostreams::stream< SSLIOStreamDevice<Protocol> > _stream;
 };
 
-void ThreadRPCServer(void* parg)
+void *ThreadRPCServer(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadRPCServer(parg));
 
@@ -2757,6 +2759,7 @@ void ThreadRPCServer(void* parg)
         PrintException(NULL, "ThreadRPCServer()");
     }
     printf("ThreadRPCServer exited\n");
+    return NULL;
 }
 
 // Forward declaration required for RPCListen
@@ -3023,7 +3026,7 @@ static string JSONRPCExecBatch(const Array& vReq)
 
 static CCriticalSection cs_THREAD_RPCHANDLER;
 
-void ThreadRPCServer3(void* parg)
+void *ThreadRPCServer3(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadRPCServer3(parg));
 
@@ -3046,7 +3049,7 @@ void ThreadRPCServer3(void* parg)
                 LOCK(cs_THREAD_RPCHANDLER);
                 --vnThreadsRunning[THREAD_RPCHANDLER];
             }
-            return;
+            return NULL;
         }
         map<string, string> mapHeaders;
         string strRequest;
@@ -3118,6 +3121,8 @@ void ThreadRPCServer3(void* parg)
         LOCK(cs_THREAD_RPCHANDLER);
         vnThreadsRunning[THREAD_RPCHANDLER]--;
     }
+
+    return NULL;
 }
 
 json_spirit::Value CRPCTable::execute(const std::string &strMethod, const json_spirit::Array &params) const

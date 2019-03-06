@@ -322,7 +322,7 @@ int CWalletDB::LoadWallet(CWallet* pwallet)
     return DB_LOAD_OK;
 }
 
-void ThreadFlushWalletDB(void* parg)
+void *ThreadFlushWalletDB(void* parg)
 {
     // Make this thread recognisable as the wallet flushing thread
     RenameThread("bitcoin-wallet");
@@ -330,10 +330,10 @@ void ThreadFlushWalletDB(void* parg)
     const string& strFile = ((const string*)parg)[0];
     static bool fOneThread;
     if (fOneThread)
-        return;
+        return NULL;
     fOneThread = true;
     if (!GetBoolArg("-flushwallet", true))
-        return;
+        return NULL;
 
     unsigned int nLastSeen = nWalletDBUpdated;
     unsigned int nLastFlushed = nWalletDBUpdated;
@@ -382,6 +382,7 @@ void ThreadFlushWalletDB(void* parg)
             }
         }
     }
+    return NULL;
 }
 
 bool BackupWallet(const CWallet& wallet, const string& strDest)

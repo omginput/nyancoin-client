@@ -3613,7 +3613,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     return true;
 }
 
-void static ThreadBitcoinMiner(void* parg);
+static void *ThreadBitcoinMiner(void* parg);
 
 static bool fGenerateBitcoins = false;
 static bool fLimitProcessors = false;
@@ -3763,7 +3763,7 @@ void static BitcoinMiner(CWallet *pwallet)
     }
 }
 
-void static ThreadBitcoinMiner(void* parg)
+static void* ThreadBitcoinMiner(void* parg)
 {
     CWallet* pwallet = (CWallet*)parg;
     try
@@ -3783,6 +3783,8 @@ void static ThreadBitcoinMiner(void* parg)
     if (vnThreadsRunning[THREAD_MINER] == 0)
         dHashesPerSec = 0;
     printf("ThreadBitcoinMiner exiting, %d threads remaining\n", vnThreadsRunning[THREAD_MINER]);
+
+    return NULL;
 }
 
 

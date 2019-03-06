@@ -28,7 +28,7 @@ void ipcInit() { }
 
 #else
 
-static void ipcThread(void* pArg)
+static void *ipcThread(void* pArg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ipcThread(pArg));
 	
@@ -45,6 +45,7 @@ static void ipcThread(void* pArg)
         PrintExceptionContinue(NULL, "ipcThread()");
     }
     printf("ipcThread exited\n");
+    return NULL;
 }
 
 static void ipcThread2(void* pArg)

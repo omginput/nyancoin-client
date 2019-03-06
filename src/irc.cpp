@@ -187,7 +187,7 @@ bool GetIPFromIRC(SOCKET hSocket, string strMyName, CNetAddr& ipRet)
 
 
 
-void ThreadIRCSeed(void* parg)
+void *ThreadIRCSeed(void* parg)
 {
     IMPLEMENT_RANDOMIZE_STACK(ThreadIRCSeed(parg));
 
@@ -204,6 +204,8 @@ void ThreadIRCSeed(void* parg)
         PrintExceptionContinue(NULL, "ThreadIRCSeed()");
     }
     printf("ThreadIRCSeed exited\n");
+
+    return NULL;
 }
 
 void ThreadIRCSeed2(void* parg)

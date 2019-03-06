@@ -376,7 +376,7 @@ bool SoftSetBoolArg(const std::string& strArg, bool fValue);
         if (nLoops-- > 1)                       \
         {                                       \
             ThreadFn;                           \
-            return;                             \
+            return NULL;                             \
         }                                       \
     }
 
@@ -585,7 +585,7 @@ inline void SetThreadPriority(int nPriority)
     SetThreadPriority(GetCurrentThread(), nPriority);
 }
 #else
-inline pthread_t CreateThread(void(*pfn)(void*), void* parg, bool fWantHandle=false)
+inline pthread_t CreateThread(void*(*pfn)(void*), void* parg, bool fWantHandle=false)
 {
     pthread_t hthread = 0;
     int ret = pthread_create(&hthread, NULL, (void*(*)(void*))pfn, parg);
