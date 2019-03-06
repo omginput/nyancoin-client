@@ -114,13 +114,16 @@ contains(BITCOIN_NEED_QT_PLUGINS, 1) {
     DEFINES += HAVE_BUILD_INFO
 }
 
-gcc:QMAKE_CFLAGS += -msse2
-gcc:QMAKE_CXXFLAGS += -msse2
+gcc:QMAKE_CFLAGS += -msse2 -Wa,-mbig-obj
+gcc:QMAKE_CXXFLAGS += -msse2 -Wa,-mbig-obj
 gcc:QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wextra -Wformat -Wformat-security -Wno-unused-parameter  -Wstack-protector
 
 msvc:QMAKE_CFLAGS += /arch:SSE2
 msvc:QMAKE_CXXFLAGS += /arch:SSE2
 msvc:QMAKE_CXXFLAGS_WARN_ON = -Wall
+
+gcc:QMAKE_CFLAGS_DEBUG += -Og
+gcc:QMAKE_CXXFLAGS_DEBUG += -Og
 
 # Input
 DEPENDPATH += src src/json src/qt
