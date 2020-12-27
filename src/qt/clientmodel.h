@@ -2,6 +2,8 @@
 #define CLIENTMODEL_H
 
 #include <QObject>
+#include <boost/signals2.hpp>
+using boost::placeholders::_1;
 
 class OptionsModel;
 class AddressTableModel;

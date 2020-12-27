@@ -2,6 +2,8 @@
 #define WALLETMODEL_H
 
 #include <QObject>
+#include <boost/signals2.hpp>
+using namespace boost::placeholders;
 
 #include "allocators.h" /* for SecureString */
 
