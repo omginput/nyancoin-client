@@ -65,9 +65,6 @@ OBJS= \
 
 all: nyancoin.exe
 
-obj/scrypt.o: scrypt.c
-	gcc -c $(CFLAGS) -o $@ $^
-
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<
 

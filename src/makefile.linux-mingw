@@ -81,9 +81,6 @@ OBJS= \
 
 all: nyancoin.exe
 
-obj/scrypt.o: scrypt.c
-	$(CC) -c $(CFLAGS) -o $@ $^
-
 obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
 version.cpp: obj/build.h
