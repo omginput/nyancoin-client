@@ -12,14 +12,15 @@ QT += widgets network
 BDB_LIB_PATH=/opt/BerkeleyDB-4.8/lib
 BDB_INCLUDE_PATH=/opt/BerkeleyDB-4.8/include
 
-macx:BDB_LIB_PATH = /opt/local/lib/db48
-macx:BDB_INCLUDE_PATH = /opt/local/include/db48
-macx:BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.61.0_1/include
-macx:BOOST_LIB_PATH=/usr/local/lib
+macx:BDB_LIB_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/lib
+macx:BDB_INCLUDE_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
+macx:BOOST_INCLUDE_PATH=/opt/homebrew/Cellar/boost/1.75.0/include
+macx:BOOST_LIB_PATH=/opt/homebrew/Cellar/boost/1.75.0/lib
 macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
 #macx:QMAKE_MAC_SDK = macosx10.10
-macx:OPENSSL_LIB_PATH += /opt/local/lib
-macx:OPENSSL_INCLUDE_PATH += /opt/local/include
+macx:OPENSSL_LIB_PATH += /opt/homebrew/Cellar/openssl@1.1/1.1.1i/lib
+macx:OPENSSL_INCLUDE_PATH += /opt/homebrew/Cellar/openssl@1.1/1.1.1i/include
+macx:QMAKE_CXXFLAGS += -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
