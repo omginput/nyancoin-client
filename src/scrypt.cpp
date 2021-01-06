@@ -77,7 +77,7 @@ HMAC_SHA256_Init(HMAC_SHA256_CTX *ctx, const void *_K, size_t Klen)
 {
 	unsigned char pad[64];
 	unsigned char khash[32];
-	const unsigned char *K = _K;
+	const unsigned char *K = (const unsigned char *)_K;
 	size_t i;
 
 	/* If Klen > 64, the key is really SHA256(K). */
@@ -295,6 +295,7 @@ void scrypt_1024_1_1_256_sp(const char *input, char *output, char *scratchpad)
 
 void scrypt_1024_1_1_256(const char *input, char *output)
 {
-	char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
-	scrypt_1024_1_1_256_sp(input, output, scratchpad);
+    static char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+    memset(scratchpad, 0, sizeof(scratchpad));
+    scrypt_1024_1_1_256_sp(input, output, scratchpad);
 }

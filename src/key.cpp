@@ -318,8 +318,11 @@ bool CKey::SignCompact(uint256 hash, std::vector<unsigned char>& vchSig)
                 }
         }
 
-        if (nRecId == -1)
+        if (nRecId == -1){
+	//https://github.com/bitcoin/bitcoin/commit/6f21e73
+            ECDSA_SIG_free(sig);
             throw key_error("CKey::SignCompact() : unable to construct recoverable key");
+	}
 
         vchSig[0] = nRecId+27+(fCompressedPubKey ? 4 : 0);
         BN_bn2bin(sigR,&vchSig[33-(nBitsR+7)/8]);
@@ -362,6 +365,8 @@ bool CKey::SetCompactSignature(uint256 hash, const std::vector<unsigned char>& v
         ECDSA_SIG_free(sig);
         return true;
     }
+    //https://github.com/bitcoin/bitcoin/commit/27e35bf
+    ECDSA_SIG_free(sig);
     return false;
 }
 

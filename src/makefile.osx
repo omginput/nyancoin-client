@@ -77,7 +77,6 @@ OBJS= \
     obj/key.o \
     obj/db.o \
     obj/init.o \
-    obj/irc.o \
     obj/keystore.o \
     obj/main.o \
     obj/net.o \
@@ -108,13 +107,6 @@ all: nyancoin
 # auto-generated dependencies:
 -include obj/*.P
 -include obj-test/*.P
-
-obj/scrypt.o: scrypt.c
-	gcc -c $(CFLAGS) -MMD -o $@ $<
-	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
-	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
-	  rm -f $(@:%.o=%.d)
 
 obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
