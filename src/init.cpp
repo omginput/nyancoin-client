@@ -51,7 +51,7 @@ void StartShutdown()
 #endif
 }
 
-void Shutdown(void* parg)
+void* Shutdown(void* parg)
 {
     static CCriticalSection cs_Shutdown;
     static bool fTaken;
