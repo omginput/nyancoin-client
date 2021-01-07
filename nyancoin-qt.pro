@@ -12,15 +12,25 @@ QT += widgets network
 BDB_LIB_PATH=/opt/BerkeleyDB-4.8/lib
 BDB_INCLUDE_PATH=/opt/BerkeleyDB-4.8/include
 
-macx:BDB_LIB_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/lib
-macx:BDB_INCLUDE_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
-macx:BOOST_INCLUDE_PATH=/opt/homebrew/Cellar/boost/1.75.0/include
-macx:BOOST_LIB_PATH=/opt/homebrew/Cellar/boost/1.75.0/lib
+macx:BDB_LIB_PATH = /opt/local/lib/db48
+macx:BDB_INCLUDE_PATH = /opt/local/include/db48
+macx:BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.61.0_1/include
+macx:BOOST_LIB_PATH=/usr/local/lib
 macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
 #macx:QMAKE_MAC_SDK = macosx10.10
-macx:OPENSSL_LIB_PATH += /opt/homebrew/Cellar/openssl@1.1/1.1.1i/lib
-macx:OPENSSL_INCLUDE_PATH += /opt/homebrew/Cellar/openssl@1.1/1.1.1i/include
-macx:QMAKE_CXXFLAGS += -DBOOST_BIND_GLOBAL_PLACEHOLDERS
+macx:OPENSSL_LIB_PATH += /opt/local/lib
+macx:OPENSSL_INCLUDE_PATH += /opt/local/include
+
+## For MacOS Big Sur M1 you may need these options:
+#macx:BDB_LIB_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/lib
+#macx:BDB_INCLUDE_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
+#macx:BOOST_INCLUDE_PATH=/opt/homebrew/Cellar/boost/1.75.0/include
+#macx:BOOST_LIB_PATH=/opt/homebrew/Cellar/boost/1.75.0/lib
+#macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+#macx:QMAKE_MAC_SDK = macosx10.10
+#macx:OPENSSL_LIB_PATH += /opt/homebrew/Cellar/openssl@1.1/1.1.1i/lib
+#macx:OPENSSL_INCLUDE_PATH += /opt/homebrew/Cellar/openssl@1.1/1.1.1i/include
+#macx:QMAKE_CXXFLAGS += -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
@@ -163,6 +173,7 @@ HEADERS += src/qt/bitcoingui.h \
     src/walletdb.h \
     src/script.h \
     src/init.h \
+    src/irc.h \
     src/mruset.h \
     src/json/json_spirit_writer_template.h \
     src/json/json_spirit_writer.h \
@@ -226,6 +237,7 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/main.cpp \
     src/init.cpp \
     src/net.cpp \
+    src/irc.cpp \
     src/checkpoints.cpp \
     src/addrman.cpp \
     src/db.cpp \
@@ -263,7 +275,7 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/notificator.cpp \
     src/qt/qtipcserver.cpp \
     src/qt/rpcconsole.cpp \
-    src/scrypt.cpp \
+    src/scrypt.c \
     src/qt/miningpage.cpp \
     src/noui.cpp \
     src/qt/nyanspaceapi.cpp
