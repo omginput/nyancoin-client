@@ -26,7 +26,6 @@ public:
     }
 
 public:
-    bool StartExposter();
     void update_peer_count(size_t num);
     void inc_recv_bytes(size_t num, const std::string from);
     void inc_send_bytes(size_t num, const std::string to);
