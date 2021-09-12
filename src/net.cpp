@@ -10,7 +10,6 @@
 #include "strlcpy.h"
 #include "addrman.h"
 #include "ui_interface.h"
-#include "metrics.h"
 
 #ifdef WIN32
 #include <string.h>

@@ -27,16 +27,18 @@ Metrics::Metrics()
                             .Help("Number of observed peers")
                             .Register(*registry);
 
-    // add and remember dimensional data, incrementing those is very cheap
-    this->tcp_rx_counter =
-        &packet_counter->Add({{"protocol", "tcp"}, {"direction", "rx"}});
-    this->tcp_tx_counter =
-        &packet_counter->Add({{"protocol", "tcp"}, {"direction", "tx"}});
-
     this->exposer->RegisterCollectable(registry);
 }
 
 void Metrics::update_peer_count(size_t num)
 {
     this->peer_gauge->Add({}).Set((double)num);
+}
+
+void Metrics::inc_recv_bytes(size_t num, const std::string from) {
+    this->packet_counter->Add({{"protocol", "tcp"}, {"direction", "rx"}, {"address", from.c_str()}}).Increment((double)num);
+}
+
+void Metrics::inc_send_bytes(size_t num, const std::string to) {
+    this->packet_counter->Add({{"protocol", "tcp"}, {"direction", "tx"}, {"address", to.c_str()}}).Increment((double)num);
 }
