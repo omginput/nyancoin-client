@@ -10,6 +10,7 @@
 #include "strlcpy.h"
 #include "addrman.h"
 #include "ui_interface.h"
+#include "metrics.h"
 
 #ifdef WIN32
 #include <string.h>
@@ -727,6 +728,7 @@ void *ThreadSocketHandler2(void* parg)
         {
             nPrevNodeCount = vNodes.size();
             uiInterface.NotifyNumConnectionsChanged(vNodes.size());
+            Metrics::getInstance()->update_peer_count(vNodes.size());
         }
 
 

@@ -32,6 +32,12 @@ macx:OPENSSL_INCLUDE_PATH += /usr/local/opt/openssl@3.0.0/include
 #macx:OPENSSL_INCLUDE_PATH = /opt/homebrew/Cellar/openssl@1.1/1.1.1i/include
 #macx:QMAKE_CXXFLAGS += -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 
+# Metrics stuff
+macx {
+    QMAKE_CXXFLAGS += -I/usr/local/Cellar/prometheus-cpp/0.13.0/include
+    QMAKE_LFLAGS += -L/usr/local/Cellar/prometheus-cpp/0.13.0/lib -lprometheus-cpp-pull -lprometheus-cpp-core -lz
+}
+
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
 
 win32 {
