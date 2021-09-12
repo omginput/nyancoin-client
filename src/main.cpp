@@ -1996,6 +1996,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
         mapOrphanBlocksByPrev.erase(hashPrev);
     }
 
+    if (fMetrics) Metrics::getInstance()->update_chain_height(pindexBest->nHeight);
     printf("ProcessBlock: ACCEPTED\n");
     return true;
 }

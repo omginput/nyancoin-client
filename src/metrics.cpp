@@ -25,6 +25,11 @@ void Metrics::createRegistry()
     // @note please follow the metric-naming best-practices:
     // https://prometheus.io/docs/practices/naming/
 
+    this->chain_height = &BuildGauge()
+                                .Name("nyancoin_blockchain_height")
+                                .Help("Number of confirmed blocks in blockchain")
+                                .Register(*registry);
+
     this->packet_counter = &BuildCounter()
                                 .Name("nyancoin_packets_total")
                                 .Help("Number of observed packets")
@@ -36,6 +41,11 @@ void Metrics::createRegistry()
                             .Register(*registry);
 
     this->exposer->RegisterCollectable(registry);
+}
+
+void Metrics::update_chain_height(size_t num)
+{
+    this->chain_height->Add({}).Set((double)num);
 }
 
 void Metrics::update_peer_count(size_t num)

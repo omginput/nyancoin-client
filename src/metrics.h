@@ -15,7 +15,6 @@
 class Metrics
 {
 public:
-    Metrics();
     Metrics(const std::string ipport);
     Metrics(const Metrics &) = delete;
     Metrics &operator=(const Metrics &) = delete;
@@ -27,6 +26,7 @@ public:
     }
 
 public:
+    void update_chain_height(size_t num);
     void update_peer_count(size_t num);
     void inc_recv_bytes(size_t num, const std::string from);
     void inc_send_bytes(size_t num, const std::string to);
@@ -36,6 +36,8 @@ private:
 
     prometheus::Exposer *exposer;
     std::shared_ptr<prometheus::Registry> registry;
+
+    prometheus::Family<prometheus::Gauge> *chain_height;
     prometheus::Family<prometheus::Gauge> *peer_gauge;
     prometheus::Family<prometheus::Counter> *packet_counter;
 };
