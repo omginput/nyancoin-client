@@ -53,7 +53,7 @@ void StartShutdown()
 #endif
 }
 
-void Shutdown(void* parg)
+void* Shutdown(void* parg)
 {
     static CCriticalSection cs_Shutdown;
     static bool fTaken;
@@ -97,6 +97,7 @@ void Shutdown(void* parg)
         Sleep(100);
         __ExitThread(0);
     }
+    return nullptr;
 }
 
 void HandleSIGTERM(int)
@@ -428,14 +429,14 @@ bool AppInit2()
             return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
     }
 
-    auto metricsArg = GetArg("metrics", string());
+    std::string metricsArg = GetArg("-metrics", "");
     if (metricsArg.length() > 0)
         if (metricsArg.find(':') != string::npos) {
             // enable metrics 🦊
-            Metrics::getInstance(metricsArg);
             fMetrics = true;
-        }
-    else return InitError(_("Invalid format for -metrics, it needs to be in the format of: IP:Port"));
+            Metrics::getInstance(metricsArg);
+        } else return InitError(strprintf(_("Invalid format '%s' for -metrics, it needs to be in the format of: -metrics=IP:Port"), metricsArg.c_str()));
+    else return InitError(strprintf(_("Invalid format '%s' for -metrics, it needs to be in the format of: -metrics=IP:Port"), metricsArg.c_str()));
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 
