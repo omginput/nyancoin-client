@@ -49,6 +49,7 @@ void OptionsModel::Init()
     language = settings.value("language", "").toString();
     bHodlerLabel = settings.value("hodler", false).toBool();
     bMetricsEnable = settings.value("bMetricsEnable", false).toBool();
+    fMetrics = bMetricsEnable;
     sMetricsBindAddr = settings.value("metricsBindAddr", QVariant(QString("127.0.0.1:8080"))).toString();
 
     // These are shared with core Bitcoin; we want
@@ -182,9 +183,9 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         case HodlerLabel:
             return QVariant(bHodlerLabel);
         case MetricsEnable:
-            return QVariant(bMetricsEnable);
+            return settings.value("bMetricsEnable", false);
         case MetricsBindAddr:
-            return QVariant(sMetricsBindAddr);
+            return settings.value("metricsBindAddr", sMetricsBindAddr);
         default:
             return QVariant();
         }
