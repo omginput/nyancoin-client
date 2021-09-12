@@ -375,7 +375,7 @@ public:
         // Set the size
         unsigned int nSize = vSend.size() - nMessageStart;
         memcpy((char*)&vSend[nHeaderStart] + CMessageHeader::MESSAGE_SIZE_OFFSET, &nSize, sizeof(nSize));
-        Metrics::getInstance()->inc_send_bytes((size_t)nSize, this->addr.ToStringIPPort());
+        if (fMetrics) Metrics::getInstance()->inc_send_bytes((size_t)nSize, this->addr.ToStringIPPort());
 
         // Set the checksum
         uint256 hash = Hash(vSend.begin() + nMessageStart, vSend.end());

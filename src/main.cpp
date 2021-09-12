@@ -2394,7 +2394,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     RandAddSeedPerfmon();
     if (fDebug)
         printf("received: %s (%d bytes)\n", strCommand.c_str(), vRecv.size());
-        Metrics::getInstance()->inc_recv_bytes((size_t)vRecv.size(), pfrom->addr.ToStringIPPort());
+        if (fMetrics) Metrics::getInstance()->inc_recv_bytes((size_t)vRecv.size(), pfrom->addr.ToStringIPPort());
     if (mapArgs.count("-dropmessagestest") && GetRand(atoi(mapArgs["-dropmessagestest"])) == 0)
     {
         printf("dropmessagestest DROPPING RECV MESSAGE\n");

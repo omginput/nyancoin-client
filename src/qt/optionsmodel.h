@@ -31,6 +31,8 @@ public:
         DetachDatabases,   // bool
         Language,          // QString
         HodlerLabel,       // bool
+        MetricsEnable,     // bool
+        MetricsBindAddr,   // QString
         OptionIDRowCount,
     };
 
@@ -51,6 +53,8 @@ public:
     bool getDisplayAddresses();
     QString getLanguage() { return language; }
     bool getHodlerLabel();
+    bool getMetricsEnable();
+    QString getMetricsBindAddr();
 
 private:
     int nDisplayUnit;
@@ -59,6 +63,8 @@ private:
     bool fMinimizeOnClose;
     QString language;
     bool bHodlerLabel;
+    bool bMetricsEnable;
+    QString sMetricsBindAddr;
 
 signals:
     void displayUnitChanged(int unit);

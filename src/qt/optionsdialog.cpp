@@ -134,6 +134,8 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->transactionFee, OptionsModel::Fee);
     mapper->addMapping(ui->bitcoinAtStartup, OptionsModel::StartAtStartup);
     mapper->addMapping(ui->detachDatabases, OptionsModel::DetachDatabases);
+    mapper->addMapping(ui->metricsEnable, OptionsModel::MetricsEnable);
+    mapper->addMapping(ui->metricsBindAddr, OptionsModel::MetricsBindAddr);
 
     /* Network */
     mapper->addMapping(ui->mapPortUpnp, OptionsModel::MapPortUPnP);

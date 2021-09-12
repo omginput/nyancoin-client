@@ -16,12 +16,13 @@ class Metrics
 {
 public:
     Metrics();
+    Metrics(const std::string ipport);
     Metrics(const Metrics &) = delete;
     Metrics &operator=(const Metrics &) = delete;
 
-    static Metrics *getInstance()
+    static Metrics *getInstance(const std::string initArg = std::string())
     {
-        static Metrics _instance;
+        static Metrics _instance(initArg);
         return &_instance;
     }
 
@@ -31,6 +32,8 @@ public:
     void inc_send_bytes(size_t num, const std::string to);
 
 private:
+    void createRegistry();
+
     prometheus::Exposer *exposer;
     std::shared_ptr<prometheus::Registry> registry;
     prometheus::Family<prometheus::Gauge> *peer_gauge;

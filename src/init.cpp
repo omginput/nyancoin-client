@@ -16,6 +16,8 @@
 #include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
+#include "metrics.h"
+
 #ifndef WIN32
 #include <signal.h>
 #endif
@@ -288,6 +290,10 @@ std::string HelpMessage()
         "  -rpcsslprivatekeyfile=<file.pem>         " + _("Server private key (default: server.pem)") + "\n" +
         "  -rpcsslciphers=<ciphers>                 " + _("Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)") + "\n";
 
+    strUsage += string() + 
+        _("\nMetrics options:") + "\n" +
+        "  -metrics=listenip:listenport             " + _("Enable metrics and listen on specified IP:Port") + "\n";
+
     return strUsage;
 }
 
@@ -421,6 +427,15 @@ bool AppInit2()
         if (!ParseMoney(mapArgs["-mininput"], nMinimumInputValue))
             return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
     }
+
+    auto metricsArg = GetArg("metrics", string());
+    if (metricsArg.length() > 0)
+        if (metricsArg.find(':') != string::npos) {
+            // enable metrics 🦊
+            Metrics::getInstance(metricsArg);
+            fMetrics = true;
+        }
+    else return InitError(_("Invalid format for -metrics, it needs to be in the format of: IP:Port"));
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 

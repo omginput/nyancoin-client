@@ -48,6 +48,8 @@ void OptionsModel::Init()
     nTransactionFee = settings.value("nTransactionFee").toLongLong();
     language = settings.value("language", "").toString();
     bHodlerLabel = settings.value("hodler", false).toBool();
+    bMetricsEnable = settings.value("bMetricsEnable", false).toBool();
+    sMetricsBindAddr = settings.value("metricsBindAddr", QVariant(QString("127.0.0.1:8080"))).toString();
 
     // These are shared with core Bitcoin; we want
     // command-line options to override the GUI settings:
@@ -73,6 +75,16 @@ bool OptionsModel::Upgrade()
     // Move settings from old wallet.dat (if any):
     CWalletDB walletdb("wallet.dat");
 
+    // Set MetricsBindAddr
+    QString bindaddrKey("metricsBindAddr");
+    std::string bindaddrValue("127.0.0.1:8080");
+
+    if (walletdb.ReadSetting(bindaddrKey.toStdString(), bindaddrValue))
+    {
+        settings.setValue(bindaddrKey, QString::fromStdString(bindaddrValue));
+        walletdb.EraseSetting(bindaddrKey.toStdString());
+    }
+
     QList<QString> intOptions;
     intOptions << "nDisplayUnit" << "nTransactionFee";
     foreach(QString key, intOptions)
@@ -85,7 +97,7 @@ bool OptionsModel::Upgrade()
         }
     }
     QList<QString> boolOptions;
-    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "hodler" ;
+    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "hodler" << "bMetricsEnable" ;
     foreach(QString key, boolOptions)
     {
         bool value = false;
@@ -169,6 +181,10 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("language", "");
         case HodlerLabel:
             return QVariant(bHodlerLabel);
+        case MetricsEnable:
+            return QVariant(bMetricsEnable);
+        case MetricsBindAddr:
+            return QVariant(sMetricsBindAddr);
         default:
             return QVariant();
         }
@@ -246,6 +262,15 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case HodlerLabel:
             bHodlerLabel = value.toBool();
             settings.setValue("hodler", bHodlerLabel);
+        case MetricsEnable:
+            bMetricsEnable = value.toBool();
+            settings.setValue("bMetricsEnable", bMetricsEnable);
+            fMetrics = bMetricsEnable;
+            break;
+        case MetricsBindAddr:
+            sMetricsBindAddr = value.toString();
+            settings.setValue("metricsBindAddr", sMetricsBindAddr);
+            break;
         default:
             break;
         }
@@ -283,4 +308,14 @@ bool OptionsModel::getDisplayAddresses()
 bool OptionsModel::getHodlerLabel()
 {
     return bHodlerLabel;
+}
+
+bool OptionsModel::getMetricsEnable()
+{
+    return fMetrics;
+}
+
+QString OptionsModel::getMetricsBindAddr()
+{
+    return sMetricsBindAddr;
 }

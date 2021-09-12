@@ -727,7 +727,7 @@ void *ThreadSocketHandler2(void* parg)
         {
             nPrevNodeCount = vNodes.size();
             uiInterface.NotifyNumConnectionsChanged(vNodes.size());
-            Metrics::getInstance()->update_peer_count(vNodes.size());
+            if (fMetrics) Metrics::getInstance()->update_peer_count(vNodes.size());
         }
 
 
