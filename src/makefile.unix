@@ -95,7 +95,7 @@ DEBUGFLAGS=-g
 
 # CXXFLAGS can be specified on the make command line, so we use xCXXFLAGS that only
 # adds some defaults in front. Unfortunately, CXXFLAGS=... $(CXXFLAGS) does not work.
-xCXXFLAGS=-O2 -pthread -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter \
+xCXXFLAGS=-O2 -pthread -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter -std=c++11 \
     $(DEBUGFLAGS) $(DEFS) $(HARDENING) $(CXXFLAGS)
 
 # LDFLAGS can be specified on the make command line, so we use xLDFLAGS that only
@@ -125,7 +125,8 @@ OBJS= \
     obj/util.o \
     obj/wallet.o \
     obj/walletdb.o \
-    obj/noui.o
+    obj/noui.o \
+    obj/metrics.o
 
 
 all: nyancoind

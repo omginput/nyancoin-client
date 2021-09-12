@@ -134,7 +134,7 @@ win32 {
 }
 
 gcc:QMAKE_CFLAGS += -msse2
-gcc:QMAKE_CXXFLAGS += -msse2
+gcc:QMAKE_CXXFLAGS += -msse2 -std=c++11
 gcc:QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wextra -Wformat -Wformat-security -Wno-unused-parameter  -Wstack-protector
 
 msvc:QMAKE_CFLAGS += /arch:SSE2
@@ -276,7 +276,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/scrypt.cpp \
     src/qt/miningpage.cpp \
     src/noui.cpp \
-    src/qt/nyanspaceapi.cpp
+    src/qt/nyanspaceapi.cpp \
+    src/metrics.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
