@@ -183,7 +183,7 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         case HodlerLabel:
             return QVariant(bHodlerLabel);
         case MetricsEnable:
-            return settings.value("bMetricsEnable", false);
+            return QVariant(bMetricsEnable);
         case MetricsBindAddr:
             return settings.value("metricsBindAddr", sMetricsBindAddr);
         default:
@@ -263,6 +263,7 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case HodlerLabel:
             bHodlerLabel = value.toBool();
             settings.setValue("hodler", bHodlerLabel);
+            break;
         case MetricsEnable:
             bMetricsEnable = value.toBool();
             settings.setValue("bMetricsEnable", bMetricsEnable);

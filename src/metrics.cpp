@@ -2,17 +2,14 @@
 
 using namespace prometheus;
 
-Metrics::Metrics()
-{
-    // create an http server running on port 8080
-    this->exposer = new Exposer{"127.0.0.1:8080"};
-    this->createRegistry();
-}
-
 Metrics::Metrics(const std::string ipport)
 {
     // create an http server running on port 8080
-    this->exposer = new Exposer{ipport};
+    if (ipport.length() <= 0) {
+        this->exposer = new Exposer{"127.0.0.1:8080"};
+    } else {
+        this->exposer = new Exposer{ipport};
+    }
     this->createRegistry();
 }
 
