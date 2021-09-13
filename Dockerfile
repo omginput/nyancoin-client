@@ -2,11 +2,20 @@ FROM ubuntu:20.04 as builder
 LABEL maintainer="Sophie Luna Schumann <docker@luna.vg>"
 
 # Essential packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y git ca-certificates build-essential gcc make libupnp-dev libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libdb5.3++-dev libdb5.3-dev libminiupnpc-dev && apt-get clean
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y cmake git ca-certificates build-essential gcc make libupnp-dev libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libdb5.3++-dev libdb5.3-dev libminiupnpc-dev && apt-get clean
 
+WORKDIR /app
+COPY . .
+
+RUN git clone https://github.com/civetweb/civetweb.git
+RUN cd civetweb && \
+    mkdir _build; cd _build && \
+    cmake .. -DCIVETWEB_INSTALL_EXECUTABLE=OFF -DCIVETWEB_ENABLE_SERVER_EXECUTABLE=OFF -DCIVETWEB_BUILD_TESTING=OFF -DCIVETWEB_ENABLE_CXX=ON -DCIVETWEB_ENABLE_IPV6=ON -DCIVETWEB_DISABLE_CGI=ON -DCIVETWEB_ENABLE_ZLIB=ON -DCIVETWEB_ENABLE_SSL=ON  && \
+    make -j$(nproc) && make install 
+
+WORKDIR /app
 # Run build script
-RUN git clone https://github.com/Nyancoins/nyancoin-client.git && \
-    cd nyancoin-client/src && \
+RUN cd src && \
     make -f makefile.unix STATIC=1 RELEASE=1 -j$(nproc) && \
     strip -s nyancoind && \
     cp -v nyancoind /usr/bin
