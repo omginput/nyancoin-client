@@ -12,30 +12,24 @@ QT += widgets network
 BDB_LIB_PATH=/opt/BerkeleyDB-4.8/lib
 BDB_INCLUDE_PATH=/opt/BerkeleyDB-4.8/include
 
-macx:BDB_LIB_PATH = /usr/local/Cellar/berkeley-db@4/4.8.30/lib
-macx:BDB_INCLUDE_PATH = /usr/local/Cellar/berkeley-db@4/4.8.30/include
-macx:BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.76.0/include
-macx:BOOST_LIB_PATH=/usr/local/lib
+macx:BDB_LIB_PATH = /usr/local/Cellar/berkeley-db@4/4.8.30/lib /opt/homebrew/Cellar/berkeley-db@4/4.8.30/lib
+macx:BDB_INCLUDE_PATH = /usr/local/Cellar/berkeley-db@4/4.8.30/include /opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
+macx:BOOST_INCLUDE_PATH=/usr/local/include /opt/homebrew/include
+macx:BOOST_LIB_PATH=/usr/local/lib /opt/homebrew/lib
 macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
 #macx:QMAKE_MAC_SDK = macosx10.10
-macx:OPENSSL_LIB_PATH += /usr/local/opt/openssl@3.0.0/lib
-macx:OPENSSL_INCLUDE_PATH += /usr/local/opt/openssl@3.0.0/include
+macx:OPENSSL_LIB_PATH += /usr/local/opt/openssl@3.0.0/lib /opt/homebrew/opt/openssl@3.0.0/lib
+macx:OPENSSL_INCLUDE_PATH += /usr/local/opt/openssl@3.0.0/include /opt/homebrew/opt/openssl@3.0.0/include
 
-## For MacOS Big Sur M1 you may need these options:
-#macx:BDB_LIB_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/lib
-#macx:BDB_INCLUDE_PATH = /opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
-#macx:BOOST_INCLUDE_PATH=/opt/homebrew/Cellar/boost/1.75.0_1/include
-#macx:BOOST_LIB_PATH=/opt/homebrew/Cellar/boost/1.75.0_1/lib
-#macx:QMAKE_CXXFLAGS += -Wno-deprecated-declarations
-#macx:QMAKE_MAC_SDK = macosx10.10
-#macx:OPENSSL_LIB_PATH = /opt/homebrew/Cellar/openssl@1.1/1.1.1i/lib
-#macx:OPENSSL_INCLUDE_PATH = /opt/homebrew/Cellar/openssl@1.1/1.1.1i/include
-#macx:QMAKE_CXXFLAGS += -DBOOST_BIND_GLOBAL_PLACEHOLDERS
 
-# Metrics stuff
 macx {
-    QMAKE_CXXFLAGS += -I/usr/local/Cellar/prometheus-cpp/0.13.0/include
-    QMAKE_LFLAGS += -L/usr/local/Cellar/prometheus-cpp/0.13.0/lib -lprometheus-cpp-pull -lprometheus-cpp-core -lz
+    # Homebrew support
+    QMAKE_CXXFLAGS += -I/usr/local/include -I/opt/homebrew/include \
+        -I/usr/local/Cellar/berkeley-db@4/4.8.30/include -I/opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
+
+    QMAKE_LFLAGS += -L/usr/local/lib -L/opt/homebrew/lib -lprometheus-cpp-pull -lprometheus-cpp-core -lz \
+        -L/usr/local/opt/openssl@3.0.0/lib -L/opt/homebrew/opt/openssl@3.0.0/lib \
+        -L/usr/local/Cellar/berkeley-db@4/4.8.30/lib -L/opt/homebrew/Cellar/berkeley-db@4/4.8.30/lib
 }
 
 # UNCOMMENT THIS SECTION TO BUILD ON WINDOWS
