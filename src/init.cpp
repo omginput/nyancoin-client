@@ -436,7 +436,6 @@ bool AppInit2()
             fMetrics = true;
             Metrics::getInstance(metricsArg);
         } else return InitError(strprintf(_("Invalid format '%s' for -metrics, it needs to be in the format of: -metrics=IP:Port"), metricsArg.c_str()));
-    else return InitError(strprintf(_("Invalid format '%s' for -metrics, it needs to be in the format of: -metrics=IP:Port"), metricsArg.c_str()));
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 
