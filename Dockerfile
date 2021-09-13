@@ -43,4 +43,4 @@ RUN mkdir .nyancoin && \
 EXPOSE 33700 33701
 VOLUME [ "/root/.nyancoin" ]
 
-ENTRYPOINT ["nyancoind", "-detachdb", "-printtoconsole"]
+ENTRYPOINT ["nyancoind", "-detachdb", "-printtoconsole", "-metrics=0.0.0.0:8080"]
