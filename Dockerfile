@@ -10,8 +10,17 @@ COPY . .
 RUN git clone https://github.com/civetweb/civetweb.git
 RUN cd civetweb && \
     mkdir _build; cd _build && \
-    cmake .. -DCIVETWEB_INSTALL_EXECUTABLE=OFF -DCIVETWEB_ENABLE_SERVER_EXECUTABLE=OFF -DCIVETWEB_BUILD_TESTING=OFF -DCIVETWEB_ENABLE_CXX=ON -DCIVETWEB_ENABLE_IPV6=ON -DCIVETWEB_DISABLE_CGI=ON -DCIVETWEB_ENABLE_ZLIB=ON -DCIVETWEB_ENABLE_SSL=ON  && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCIVETWEB_INSTALL_EXECUTABLE=OFF -DCIVETWEB_ENABLE_SERVER_EXECUTABLE=OFF -DCIVETWEB_BUILD_TESTING=OFF -DCIVETWEB_ENABLE_CXX=ON -DCIVETWEB_ENABLE_IPV6=ON -DCIVETWEB_DISABLE_CGI=ON -DCIVETWEB_ENABLE_ZLIB=ON -DCIVETWEB_ENABLE_SSL=ON  && \
     make -j$(nproc) && make install 
+
+WORKDIR /app
+RUN git clone https://github.com/jupp0r/prometheus-cpp.git
+RUN cd prometheus-cpp && \
+    git submodule update --init && \
+    mkdir build; cd build && \
+    cmake .. -DBUILD_SHARED_LIBS=OFF -DENABLE_PUSH=OFF -DENABLE_COMPRESSION=ON -DENABLE_TESTING=OFF -DUSE_THIRDPARTY_LIBRARIES=OFF && \
+    cmake --build . --parallel $(nproc) && \
+    cmake --install .
 
 WORKDIR /app
 # Run build script
