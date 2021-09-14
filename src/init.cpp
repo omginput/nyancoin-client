@@ -51,7 +51,7 @@ void StartShutdown()
 #endif
 }
 
-void Shutdown(void* parg)
+void* Shutdown(void* parg)
 {
     static CCriticalSection cs_Shutdown;
     static bool fTaken;
@@ -95,6 +95,7 @@ void Shutdown(void* parg)
         Sleep(100);
         __ExitThread(0);
     }
+    return nullptr;
 }
 
 void HandleSIGTERM(int)
