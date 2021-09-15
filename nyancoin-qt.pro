@@ -24,8 +24,8 @@ macx:OPENSSL_INCLUDE_PATH += /usr/local/opt/openssl@3.0.0/include /opt/homebrew/
 
 macx {
     # Homebrew support
-    QMAKE_CXXFLAGS += -I/usr/local/include -I/opt/homebrew/include \
-        -I/usr/local/Cellar/berkeley-db@4/4.8.30/include -I/opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
+    QMAKE_CXXFLAGS += -I/usr/local/Cellar/berkeley-db@4/4.8.30/include -I/usr/local/include -I/opt/homebrew/include \
+        -I/opt/homebrew/Cellar/berkeley-db@4/4.8.30/include
 
     QMAKE_LFLAGS += -L/usr/local/lib -L/opt/homebrew/lib -lprometheus-cpp-pull -lprometheus-cpp-core -lz \
         -L/usr/local/opt/openssl@3.0.0/lib -L/opt/homebrew/opt/openssl@3.0.0/lib \
