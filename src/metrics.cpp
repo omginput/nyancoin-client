@@ -40,6 +40,11 @@ void Metrics::createRegistry()
                             .Help("Number of observed peers")
                             .Register(*registry);
 
+    this->orphan_gauge = &BuildGauge()
+                            .Name("nyan_orphan_blocks")    
+                            .Help("Number of observed orphaned blocks.")
+                            .Register(*registry);
+
     this->exposer->RegisterCollectable(registry);
 }
 
@@ -51,6 +56,11 @@ void Metrics::update_chain_height(size_t num)
 void Metrics::update_peer_count(size_t num)
 {
     this->peer_gauge->Add({}).Set((double)num);
+}
+
+void Metrics::update_orphan_blocks(size_t num)
+{
+    this->orphan_gauge->Add({}).Set((double)num);
 }
 
 void Metrics::inc_recv_bytes(size_t num, const std::string from)
