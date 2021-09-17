@@ -215,7 +215,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/miningpage.h \
     src/version.h \
     src/qt/rpcconsole.h \
-    src/qt/nyanspaceapi.h
+    src/qt/nyanspaceapi.h \
+    src/metrics.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
