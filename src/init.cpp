@@ -430,12 +430,15 @@ bool AppInit2()
     }
 
     std::string metricsArg = GetArg("-metrics", "");
-    if (metricsArg.length() > 0)
+    if (metricsArg.length() > 0) {
         if (metricsArg.find(':') != string::npos) {
             // enable metrics 🦊
             fMetrics = true;
             Metrics::getInstance(metricsArg);
-        } else return InitError(strprintf(_("Invalid format '%s' for -metrics, it needs to be in the format of: -metrics=IP:Port"), metricsArg.c_str()));
+        } else {
+            return InitError(strprintf(_("Invalid format '%s' for -metrics, it needs to be in the format of: -metrics=IP:Port"), metricsArg.c_str()));
+        }
+    }
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 
