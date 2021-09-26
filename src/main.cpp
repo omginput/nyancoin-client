@@ -1998,8 +1998,10 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 
 
     if (fMetrics) {
-        Metrics::getInstance()->update_orphan_blocks(mapOrphanBlocks.size());
-        Metrics::getInstance()->update_chain_height(pindexBest->nHeight);
+        auto metrics = Metrics::getInstance();
+        metrics->update_orphan_blocks(mapOrphanBlocks.size());
+        metrics->update_chain_height(pindexBest->nHeight);
+        metrics->update_mempool(mempool.size());
     }
     printf("ProcessBlock: ACCEPTED\n");
     return true;

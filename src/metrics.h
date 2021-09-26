@@ -29,6 +29,7 @@ public:
     void update_chain_height(size_t num);
     void update_peer_count(size_t num);
     void update_orphan_blocks(size_t num);
+    void update_mempool(size_t num);
     void inc_recv_bytes(size_t num, const std::string from);
     void inc_send_bytes(size_t num, const std::string to);
 
@@ -41,5 +42,6 @@ private:
     prometheus::Family<prometheus::Gauge> *chain_height;
     prometheus::Family<prometheus::Gauge> *peer_gauge;
     prometheus::Family<prometheus::Gauge> *orphan_gauge;
+    prometheus::Family<prometheus::Gauge> *mempool_gauge;
     prometheus::Family<prometheus::Counter> *packet_counter;
 };
