@@ -4,7 +4,7 @@ Nyancoin-Qt: Qt5 GUI for Nyancoin
 Build instructions
 ===================
 
-Debian
+Debian/Ubuntu/Mint
 -------
 
 First, make sure that the required packages for Qt5 development of your
@@ -12,9 +12,9 @@ distribution are installed, for Debian and Ubuntu these are:
 
 ::
 
-    apt-get install qt5-qmake qtbase5-dev build-essential libboost-dev libboost-system-dev \
-        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb++-dev
+    apt-get install qt5-qmake qtbase5-dev qttools5-dev-tools build-essential libboost-dev \
+        libboost-system-dev libboost-filesystem-dev libboost-program-options-dev \
+        libboost-thread-dev libssl-dev libdb++-dev
 
 then execute the following:
 
